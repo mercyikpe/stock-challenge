@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+import Button from './Button.vue';
+import TextField from './TextField.vue';
+
 // Define the props and assign them to a variable
 const props = defineProps<{
   existingStocks: { isin: string }[];
@@ -50,23 +53,24 @@ const submitForm = () => {
 <template>
   <form @submit.prevent="submitForm">
     <div class="form-group">
-      <input
+      <TextField
         v-model="isin"
         type="text"
         placeholder="Enter ISIN"
         @input="validateInput"
         :class="{ invalid: !isValid && isin.length > 0 }"
       />
+
       <small v-if="!isValid && isin.length > 0" class="error-message">
         {{ errorMessage }}
       </small>
     </div>
-    <button type="submit" :disabled="!isValid || isin.length === 0">
-      Add Stock
-    </button>
+
+    <Button type="submit" :disabled="!isValid || isin.length === 0"
+      >Add Stock</Button
+    >
   </form>
 </template>
-
 
 <style scoped>
 .form-group {
@@ -75,11 +79,11 @@ const submitForm = () => {
   margin-bottom: 1rem;
 }
 
-input {
+/* input {
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-}
+} */
 
 input.invalid {
   border-color: red;
@@ -91,14 +95,14 @@ input.invalid {
   margin-top: 0.2rem;
 }
 
-button {
+/* button {
   padding: 0.5rem 1rem;
   background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-}
+} */
 
 button:disabled {
   background-color: #cccccc;

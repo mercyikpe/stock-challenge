@@ -128,13 +128,13 @@ export default defineComponent({
 </template>
 
 <style>
-/* #app {
+ #app {
   font-family: var(--font-regular);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
+} 
 
-.main {
+/* .main {
   max-width: var(--max-width);
   margin: 0 auto;
   display: none;
@@ -146,5 +146,5 @@ export default defineComponent({
 
 .component-list {
   padding: 0 0 0 12px;
-} */
+}  */
 </style>

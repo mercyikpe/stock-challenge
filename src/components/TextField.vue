@@ -1,5 +1,24 @@
+<script setup>
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: ''
+  }
+});
+
+const emit = defineEmits(['update:modelValue']);
+</script>
+
 <template>
-  <input class="text-field" />
+
+
+<input
+  class="text-field"
+  :value="modelValue"
+  @input="$emit('update:modelValue', $event.target.value)"
+  v-bind="$attrs"
+  />
+
 </template>
 
 <style lang="scss">

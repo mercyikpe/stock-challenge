@@ -28,7 +28,10 @@ const emit = defineEmits<{
     <div v-if="props.stocks.length === 0" class="empty-state">
       <p>No stocks in your watchlist. Add stocks to track their prices.</p>
     </div>
-    <ul :class="{ 'stale-data': props.connectionStatus === 'disconnected' }" v-else>
+    <ul
+      :class="{ 'stale-data': props.connectionStatus === 'disconnected' }"
+      v-else
+    >
       <li v-for="stock in props.stocks" :key="stock.isin">
         {{ stock.isin }} - Price: {{ stock.price }} (Bid: {{ stock.bid }}, Ask:
         {{ stock.ask }})

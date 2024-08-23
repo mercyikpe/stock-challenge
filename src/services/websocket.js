@@ -1,4 +1,3 @@
-// services/websocket.js
 import { ref } from 'vue';
 
 export const useWebSocket = () => {
@@ -8,7 +7,7 @@ export const useWebSocket = () => {
 
   const initWebSocket = () => {
     socket = new WebSocket('ws://localhost:8425/');
-    
+
     socket.onopen = () => {
       connectionStatus.value = 'connected';
     };
@@ -25,7 +24,7 @@ export const useWebSocket = () => {
   };
 
   const addStock = (isin) => {
-    if (!stocks.value.some(stock => stock.isin === isin)) {
+    if (!stocks.value.some((stock) => stock.isin === isin)) {
       stocks.value.push({ isin, price: null, bid: null, ask: null });
       socket.send(JSON.stringify({ subscribe: isin }));
       return true;
@@ -34,12 +33,14 @@ export const useWebSocket = () => {
   };
 
   const removeStock = (isin) => {
-    stocks.value = stocks.value.filter(stock => stock.isin !== isin);
+    stocks.value = stocks.value.filter((stock) => stock.isin !== isin);
     socket.send(JSON.stringify({ unsubscribe: isin }));
   };
 
   const updateStockPrice = (data) => {
-    const stockIndex = stocks.value.findIndex(stock => stock.isin === data.isin);
+    const stockIndex = stocks.value.findIndex(
+      (stock) => stock.isin === data.isin
+    );
     if (stockIndex !== -1) {
       stocks.value[stockIndex] = { ...stocks.value[stockIndex], ...data };
     }
@@ -50,6 +51,6 @@ export const useWebSocket = () => {
     connectionStatus,
     initWebSocket,
     addStock,
-    removeStock
+    removeStock,
   };
 };
