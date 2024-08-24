@@ -227,6 +227,13 @@ Please zip your project and submit zip archive via the Greenhouse link attached 
 
 
 
+### Setup instructions
+Once you have unzipped the folder and are ready to run the app, you can run `yarn` to install dependencies. After that, you can run the app:
+
+```bash
+yarn dev
+```
+
 ### Implementation Documentation
 
 - [Features](#features)
@@ -269,4 +276,4 @@ The app includes unit tests that ensure the core functionality works as expected
 
 ```bash
 yarn test
-
+```
