@@ -17,7 +17,7 @@
 <style lang="scss">
 .header {
   margin: 0 auto;
-  padding: 24px 0;
+  padding: 24px 24px;
   display: flex;
   max-width: var(--max-width);
 

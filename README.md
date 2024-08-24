@@ -133,6 +133,12 @@ At this point, you can consider the challenge to be complete.
 
 This task is intentionally left open for you to add any feature you want to the application. Anything is valid, from improvements to Accessibility all the way to UI Transitions, CSS, etc.
 
+For this part, 
+Here are the extra features:
+- Accessibility - currently at 100% using Lighthouse.
+- Data Persistence -  session storage is used to save the user's watchlist during the sessions.
+
+
 ---
 
 ## Socket Reference
@@ -186,15 +192,81 @@ You would then receive a WebSocket stream with messages in the following format
 
 ## Questions
 
-1. What happens in case the WebSocket disconnects? How would you go further to keep
-   the live data available or inform the user? Please discuss the challenges.
+1. What happens in case the WebSocket disconnects? How would you go further to keep the live data available or inform the user? Please discuss the challenges.
+   
+   *Answer*
+     The connection status is updated to "disconnected" in the UI, informing the user that the connection has been lost, and also a warning message is displayed notifying the user that the  data may no longer be up to date.
 
 2. What happens if a user adds an instrument multiple times to their list? Please discuss possible challenges and mitigations.
 
+    *Answer*
+
+    Challenge: Allowing a user to add an instrument multiple times to their list can lead to significant challenges, including cluttered UI, increased network traffic, performance degradation. 
+
+    Migation: The app currently prevents duplicate subscriptions by checking if an ISIN already exists in the stocks list before adding a new one. If the ISIN is already present, the user is notified through an error message that the ISIN already exist and so the user is not allowed to add the same instrument again.
+
 3. What potential performance issues might you face when this app scales with multiple subscriptions? How would you improve the speed and user experience?
+    *Answer*
+    The potential performance issues might include:
+    -  Rendering a large list of stocks with frequent updates can cause the browser to struggle thereby causing a lag or delay in loading data
+    - Multiple subscriptions increase the amount of data being transferred over the network so users may face slowdowns due to network congestion
+    - Storing data for a large number of subscribed stocks consumes memory and therefore it might crash or cause the browser to slow down
+
+To improve users experience:
+- Adding debouncing on the implementation to ensure that updates are processed at a manageable rate.
+- Implement skeleton screens or placeholder content while data is loading.
+- Add sorting and filtering features to help users manage large lists.
+- Add debouncing to the ISIN input to reduce unnecessary validation calls.
+
 
 ---
 
 ## How to submit your solution
 
 Please zip your project and submit zip archive via the Greenhouse link attached to the email with the code challenge. Your dedicated recruiter will receive the notification about your submission and will send it for the team review.
+
+
+
+### Implementation Documentation
+
+- [Features](#features)
+- [Components](#components)
+- [Key accessibility improvements](#key-accessibility-improvements)
+- [Testing](#testing)
+- [Running the Unit Test](#running-the-unit-test)
+
+
+#### Features
+- Add Stocks to Watchlist: Users can add stocks to their watchlist by entering a valid ISIN.
+- Remove Stocks from Watchlist: Users can remove stocks from their watchlist.
+- Prevent Duplicate Subscriptions: The app prevents users from adding the same stock multiple times.
+- Real-Time Price Updates: The app receives live updates for subscribed stocks via a WebSocket connection and displays the latest price, bid, and ask values.
+- WebSocket Connection: The app handles WebSocket disconnections by notifying users when the connection is lost and attempting automatic reconnection.
+
+#### Components
+- Header.vue:   Displays the application header.
+- TextField.vue:    A custom input component used for entering ISINs.
+- Button.vue:   A custom button component used across the application.
+- StockForm.vue:    A form component where users enter an ISIN to subscribe to a stock. It includes validation to ensure the ISIN is correctly formatted and not a duplicate.
+- StockList.vue: Displays a list of subscribed stocks in a table format, showing the ISIN, price, bid, and ask values. Users can remove stocks from the list using the remove button. The component also indicates the connection status and handles situations where the WebSocket is disconnected.
+
+
+#### Key accessibility improvements:
+- Use of role, scope, aria-label to enhance description of elements for screen readers. Accessibility is currently at 100% using google lighthouse.
+
+- Session Storage: was used to persisit user's watchlist. Session storage was used so that after the session, the watchlist would no longer be persisted in the browser.
+
+
+#### Testing
+The app includes unit tests that ensure the core functionality works as expected:
+
+- Form validation tests ensure that users can only add valid ISINs and that duplicates are not allowed.
+- Stock list tests ensure that stocks are correctly rendered in a table, that the UI updates with the correct data, and that the remove functionality works as intended.
+- WebSocket tests verify that the connection is properly managed, that stocks are added/removed correctly, and that updates are handled efficiently.
+
+
+#### Running the Unit Test
+
+```bash
+yarn test
+

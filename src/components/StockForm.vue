@@ -4,17 +4,14 @@ import { ref } from 'vue';
 import Button from './Button.vue';
 import TextField from './TextField.vue';
 
-// Define the props and assign them to a variable
 const props = defineProps<{
   existingStocks: { isin: string }[];
 }>();
 
-// Define emits
 const emit = defineEmits<{
   (e: 'add-stock', isin: string): void;
 }>();
 
-// Reactive variables
 const isin = ref('');
 const isValid = ref(true);
 const errorMessage = ref('');
@@ -51,61 +48,81 @@ const submitForm = () => {
 </script>
 
 <template>
-  <form @submit.prevent="submitForm">
+  <form @submit.prevent="submitForm" class="stock-form">
     <div class="form-group">
+      <label for="isin-input" class="visually-hidden">Enter ISIN</label>
+
       <TextField
         v-model="isin"
         type="text"
         placeholder="Enter ISIN"
         @input="validateInput"
+        class="text-input"
         :class="{ invalid: !isValid && isin.length > 0 }"
+        :aria-invalid="!isValid && isin.length > 0"
+        :aria-describedby="
+          !isValid && isin.length > 0 ? 'isin-error' : undefined
+        "
       />
 
-      <small v-if="!isValid && isin.length > 0" class="error-message">
-        {{ errorMessage }}
-      </small>
+      <Button
+        class="submit-btn"
+        type="submit"
+        :disabled="!isValid || isin.length === 0"
+        aria-label="Add Stock to Watchlist"
+        >Add Stock</Button
+      >
     </div>
 
-    <Button type="submit" :disabled="!isValid || isin.length === 0"
-      >Add Stock</Button
-    >
+    <p v-if="!isValid && isin.length > 0" class="error-message" role="alert">
+      {{ errorMessage }}
+    </p>
   </form>
 </template>
 
 <style scoped>
+.stock-form {
+  margin: 0 auto;
+  max-width: 32rem;
+  text-align: center;
+}
 .form-group {
   display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
+  margin: 3rem 0 5px 0;
+  gap: 12px;
 }
 
-/* input {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-} */
+.text-input {
+  width: 90%;
+}
 
 input.invalid {
-  border-color: red;
+  border-color: var(--color-primary-red2);
 }
 
 .error-message {
-  color: red;
+  color: var(--color-primary-red3);
   font-size: 0.8rem;
   margin-top: 0.2rem;
 }
 
-/* button {
-  padding: 0.5rem 1rem;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-} */
+.submit-btn {
+  white-space: nowrap;
+}
 
 button:disabled {
-  background-color: #cccccc;
+  background-color: var(--color-foreground1);
   cursor: not-allowed;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 </style>
